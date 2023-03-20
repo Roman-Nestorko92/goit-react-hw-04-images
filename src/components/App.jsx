@@ -12,38 +12,40 @@ const App = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    if (query) fetchImages();
-  }, [query]);
+    const fetchImages = () => {
+      const options = {
+        query,
+        currentPage,
+      };
+
+      setIsLoading(true);
+
+      fetchImg(options)
+        .then(images => setImages(prevState => [...prevState, ...images]))
+        .catch(err => setError(err))
+        .finally(() => setIsLoading(false));
+    };
+    if (query) {
+      fetchImages();
+    }
+  }, [query, currentPage]);
+
+  const loadMore = () => {
+    setCurrentPage(prevState => prevState + 1);
+  };
 
   useEffect(() => {
     window.scrollTo({
       top: document.documentElement.scrollHeight,
       behavior: 'smooth',
     });
-  });
+  }, []);
 
   const handleSubmitSearchbar = query => {
     setQuery(query);
     setImages([]);
     setCurrentPage(1);
     setError(null);
-  };
-
-  const fetchImages = () => {
-    const options = {
-      query,
-      currentPage,
-    };
-
-    setIsLoading(true);
-
-    fetchImg(options)
-      .then(
-        images => setImages(prevState => [...prevState, ...images]),
-        setCurrentPage(prevState => prevState + 1)
-      )
-      .catch(err => setError(err))
-      .finally(() => setIsLoading(false));
   };
 
   return (
@@ -55,7 +57,7 @@ const App = () => {
         currentPage={currentPage}
         error={error}
         isLoading={isLoading}
-        fetchImages={fetchImages}
+        loadMore={loadMore}
       />
     </>
   );

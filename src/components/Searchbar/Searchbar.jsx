@@ -20,7 +20,6 @@ const Searchbar = ({ onSubmit }) => {
       <form className={s.searchForm} onSubmit={handleSubmit}>
         <button type="submit" className={s.searchFormButton}>
           <FaSearch size={12} />
-          {/* <span className={s.searchFormButtonLabel}>Search</span> */}
         </button>
 
         <input

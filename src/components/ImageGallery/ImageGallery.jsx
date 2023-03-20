@@ -4,12 +4,7 @@ import ImageGalleryItem from './ImageGalleryItem';
 import Modal from '../Modal/Modal';
 import s from './ImageGallery.module.css';
 
-export default function ImageGallery({
-  images,
-  error,
-  fetchImages,
-  isLoading,
-}) {
+export default function ImageGallery({ images, error, loadMore, isLoading }) {
   const [showModal, setShowModal] = useState(false);
   const [largeImageURL, setLargeImageURL] = useState(null);
 
@@ -39,7 +34,7 @@ export default function ImageGallery({
         ))}
       </ul>
 
-      {showButton && <Button onClick={fetchImages} isLoading={isLoading} />}
+      {showButton && <Button onClick={loadMore} isLoading={isLoading} />}
 
       {showModal && (
         <Modal onCloseModal={toggleModal}>
