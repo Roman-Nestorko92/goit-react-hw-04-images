@@ -1,61 +1,42 @@
-import { Component } from 'react';
-import { PropTypes } from 'prop-types';
+import { useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { BsXLg } from 'react-icons/bs';
-import css from './Modal.module.css';
+import s from './Modal.module.css';
 
 const modalRoot = document.querySelector('#modal-root');
 
-class Modal extends Component {
-  static propTypes = {
-    title: PropTypes.string,
-    onClose: PropTypes.func.isRequired,
-    currentImageURL: PropTypes.string,
-  };
+const Modal = ({ onCloseModal, children }) => {
+  useEffect(() => {
+    window.addEventListener('keydown', handleKeyDown);
 
-  componentDidMount() {
-    window.addEventListener('keydown', this.hendleKeyDown);
-  }
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  });
 
-  componentWillUnmount() {
-    window.removeEventListener('keydown', this.hendleKeyDown);
-  }
-
-  handleClickBackDrop = e => {
-    if (e.target === e.currentTarget) {
-      this.props.onClose();
-    }
-  };
-
-  hendleKeyDown = e => {
+  const handleKeyDown = e => {
     if (e.code === 'Escape') {
-      this.props.onClose();
+      onCloseModal();
     }
   };
 
-  render() {
-    const { title, onClose, currentImageUrl, currentImageDescription } =
-      this.props;
+  const handleBackdropClick = e => {
+    if (e.target === e.currentTarget) {
+      onCloseModal();
+    }
+  };
 
-    return createPortal(
-      <div className={css.backdrop} onClick={this.handleClickBackDrop}>
-        <div className={css.modal}>
-          <div className={css.wrapper}>
-            {title && <h1 className={css.title}>{title}</h1>}
-            <button className={css.button} type="button" onClick={onClose}>
-              <BsXLg className={css.icon} />
-            </button>
-          </div>
-          <img
-            src={currentImageUrl}
-            alt={currentImageDescription}
-            loading="lazy"
-          />
-        </div>
-      </div>,
-      modalRoot
-    );
-  }
-}
+  return createPortal(
+    <div className={s.backdrop} onClick={handleBackdropClick}>
+      <div className={s.modal}>
+        <button className={s.button} type="button" onClick={onCloseModal}>
+          <BsXLg className={s.icon} />
+        </button>
+        {children}
+      </div>
+    </div>,
+    modalRoot
+  );
+};
 
 export default Modal;

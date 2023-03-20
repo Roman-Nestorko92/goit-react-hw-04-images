@@ -1,104 +1,57 @@
 .backdrop {
   position: fixed;
-  top: 0;
-  left: 0;
-
   width: 100vw;
   height: 100vh;
-
-  background-color: var(--backdrop-bg-color);
+  top: 0;
+  left: 0;
+  background-color: rgba(199, 199, 199, 0.5);
 }
 
 .modal {
-  position: relative;
+  position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-
-  width: 280px;
+  width: auto;
   height: auto;
-
-  background-color: var(--main-bg-color);
-  box-shadow: var(--box-shadow);
-}
-
-@media screen and (min-width: 768px) {
-  .modal {
-    width: 600px;
-  }
-}
-
-@media screen and (min-width: 1440px) {
-  .modal {
-    width: 900px;
-  }
-}
-
-.wrapper {
+  background-color: #fff;
+  border-radius: 3px;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  padding: 20px 12px 12px 12px;
 
-  padding: 5px;
-}
-
-@media screen and (min-width: 768px) {
-  .wrapper {
-    padding: 10px;
-  }
-}
-
-@media screen and (min-width: 1440px) {
-  .wrapper {
-    padding: 30px;
-  }
-}
-
-.title {
-  font-size: 15px;
-  font-weight: 400;
-  text-transform: capitalize;
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
 }
 
 .button {
+  position: absolute;
+  top: 2px;
+  left: 2px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
 
-  width: 30px;
-  height: 20px;
+  width: 15px;
+  height: 15px;
   padding: 0;
 
   border: none;
   border-radius: 5px;
 
-  background-color: var(--second-bg-color);
-  color: var(--second-text-color);
+  background-color: white;
+  color: black;
 
   cursor: pointer;
-  transition: color var(--hover-animation);
+  transition: 300ms cubic-bezier(0.17, 0.67, 0.83, 0.67);
 }
 
 .button:hover,
 .button:focus {
-  color: yellow;
-}
-
-@media screen and (min-width: 768px) {
-  .button {
-    width: 40px;
-    height: 30px;
-  }
+  color: red;
 }
 
 .icon {
   width: 10px;
   height: 10px;
-}
-
-@media screen and (min-width: 768px) {
-  .icon {
-    width: 12px;
-    height: 12px;
-  }
 }

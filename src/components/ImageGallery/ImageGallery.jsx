@@ -1,32 +1,51 @@
-import PropTypes from 'prop-types';
-import ImageGalleryItem from '../ImageGalleryItem/Index';
-import css from './ImageGallery.module.css';
+import { useState } from 'react';
+import Button from '../Button/Button';
+import ImageGalleryItem from './ImageGalleryItem';
+import Modal from '../Modal/Modal';
+import s from './ImageGallery.module.css';
 
-function ImageGallery({ images, openModal }) {
+export default function ImageGallery({
+  images,
+  error,
+  fetchImages,
+  isLoading,
+}) {
+  const [showModal, setShowModal] = useState(false);
+  const [largeImageURL, setLargeImageURL] = useState(null);
+
+  const toggleModal = () => {
+    setShowModal(prevState => !prevState);
+    setLargeImageURL(null);
+  };
+
+  const handleModalImage = url => {
+    toggleModal();
+    setLargeImageURL(url);
+  };
+
+  const showButton = images.length > 0;
+
   return (
-    <ul className={css.container}>
-      {images.map(({ id, description, smallImage, largeImage }) => (
-        <ImageGalleryItem
-          key={id}
-          description={description}
-          smallImage={smallImage}
-          largeImage={largeImage}
-          openModal={openModal}
-        />
-      ))}
-    </ul>
+    <>
+      {error && <h2>{error}</h2>}
+      <ul className={s.imageGallery}>
+        {images.map(({ id, webformatURL, largeImageURL }) => (
+          <ImageGalleryItem
+            key={id}
+            webformatURL={webformatURL}
+            onToggleModal={handleModalImage}
+            largeImageURL={largeImageURL}
+          />
+        ))}
+      </ul>
+
+      {showButton && <Button onClick={fetchImages} isLoading={isLoading} />}
+
+      {showModal && (
+        <Modal onCloseModal={toggleModal}>
+          <img src={largeImageURL} alt="" />
+        </Modal>
+      )}
+    </>
   );
 }
-
-ImageGallery.prototype = {
-  images: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.number.isRequired,
-      description: PropTypes.string,
-      smallImage: PropTypes.string.isRequired,
-      largeImage: PropTypes.string.isRequired,
-    })
-  ).isRequired,
-};
-
-export default ImageGallery;

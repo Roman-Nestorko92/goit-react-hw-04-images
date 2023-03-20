@@ -1,59 +1,38 @@
-import { Component } from 'react';
+import { useState } from 'react';
 import { FaSearch } from 'react-icons/fa';
-import { toast } from 'react-toastify';
-import PropTypes from 'prop-types';
-import css from './Searchbar.module.css';
+import s from './Searchbar.module.css';
 
-class Searchbar extends Component {
-  static propTypes = {
-    onSubmit: PropTypes.func.isRequired,
-  };
+const Searchbar = ({ onSubmit }) => {
+  const [query, setQuery] = useState('');
 
-  state = {
-    query: '',
-  };
-
-  onChangeInput = e => {
-    this.setState({ query: e.currentTarget.value });
-  };
-
-  onSubmitForm = e => {
+  const handleSubmit = e => {
     e.preventDefault();
-
-    const { onSubmit } = this.props;
-    const { query } = this.state;
-
-    if (query.trim() === '') {
-      toast.error('Enter a search term.');
-      return;
-    }
-
     onSubmit(query);
+    setQuery('');
   };
 
-  render() {
-    const { query } = this.state;
+  const handleChange = ({ currentTarget }) => {
+    setQuery(currentTarget.value);
+  };
 
-    return (
-      <header className={css.header}>
-        <form className={css.form} onSubmit={this.onSubmitForm}>
-          <button className={css.button} type="submit">
-            <FaSearch size={12} />
-          </button>
+  return (
+    <header className={s.searchBar}>
+      <form className={s.searchForm} onSubmit={handleSubmit}>
+        <button type="submit" className={s.searchFormButton}>
+          <FaSearch size={12} />
+          {/* <span className={s.searchFormButtonLabel}>Search</span> */}
+        </button>
 
-          <input
-            className={css.input}
-            type="text"
-            autoComplete="off"
-            autoFocus
-            placeholder="Search images and photos"
-            value={query}
-            onChange={this.onChangeInput}
-          />
-        </form>
-      </header>
-    );
-  }
-}
+        <input
+          className={s.searchFormInput}
+          type="text"
+          value={query}
+          onChange={handleChange}
+          placeholder={'search'}
+        />
+      </form>
+    </header>
+  );
+};
 
 export default Searchbar;
